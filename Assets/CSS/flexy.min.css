@@ -238,7 +238,6 @@ body {
 /* Posiciona el circulito rojo correctamente */
 .app-header #notificationsIcon .fa-circle {
     position: absolute;
-    right: -4px;
-    top: 2px;
+    bottom: 20px;
     font-size: 0.6rem;
 }

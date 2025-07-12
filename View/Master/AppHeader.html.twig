@@ -52,6 +52,9 @@
                                 <i class="fa-regular fa-envelope"></i>
                                 <p class="mb-0 fs-3">{{ trans('send-mail') }}</p>
                             </a>
+                            {% for includeView in getIncludeViews('MenuTemplate', 'MenuIconUser') %}
+                                {% include includeView['path'] %}
+                            {% endfor %}
                             <a href="{{ asset('login') }}?action=logout&multireqtoken={{ formToken(false) }}"
                                class="btn btn-outline-primary mx-3 mt-2 d-block">{{ trans('logout') }}</a>
                         </div>
