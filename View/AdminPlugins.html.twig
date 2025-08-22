@@ -42,8 +42,8 @@
                     {% endif %}
                 </div>
                 {% if config('disable_add_plugins', false) == false %}
-                    <button class="btn btn-spin-action btn-sm btn-success" type="button" data-toggle="modal"
-                            data-target="#modalAddPlugin">
+                    <button class="btn btn-spin-action btn-sm btn-success" type="button" data-bs-toggle="modal"
+                            data-bs-target="#modalAddPlugin">
                         <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">{{ trans('add') }}</span>
                     </button>
@@ -56,7 +56,7 @@
                     </a>
                 </div>
             </div>
-            <div class="col-sm text-right">
+            <div class="col-sm text-end">
                 <h1 class="h3">
                     {{ trans(fsc.getPageData()['title']) | capitalize }}
                     <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i>
@@ -66,7 +66,7 @@
     </div>
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="installedPluginsTab" data-toggle="tab" href="#installed" role="tab">
+            <a class="nav-link active" id="installedPluginsTab" data-bs-toggle="tab" href="#installed" role="tab">
                 <i class="fas fa-box-open fa-fw" aria-hidden="true"></i> {{ trans('installed-plugins') }}
                 {% if fsc.pluginList | length > 0 %}
                     <span class="badge badge-secondary">{{ fsc.pluginList | length }}</span>
@@ -75,7 +75,7 @@
         </li>
         {% if config('disable_add_plugins', false) == false %}
             <li class="nav-item">
-                <a class="nav-link" id="allPluginsTab" data-toggle="tab" href="#all" role="tab">
+                <a class="nav-link" id="allPluginsTab" data-bs-toggle="tab" href="#all" role="tab">
                     <i class="fas fa-boxes fa-fw" aria-hidden="true"></i>
                     <span class="d-none d-sm-inline-block">{{ trans('more-plugins') }}</span>
                     {% if fsc.remotePluginList | length > 0 %}
@@ -141,7 +141,7 @@
                                     </small>
                                 {% endif %}
                             </div>
-                            <div class="text-right mt-5">
+                            <div class="text-end mt-5">
                                 <button type="button" class="btn btn-spin-action btn-secondary" data-dismiss="modal">
                                     {{ trans('cancel') }}
                                 </button>
@@ -308,9 +308,9 @@
             <thead>
             <tr>
                 <th>{{ trans('name') }}</th>
-                <th class="text-right">{{ trans('version') }}</th>
+                <th class="text-end">{{ trans('version') }}</th>
                 <th>{{ trans('description') }}</th>
-                <th class="text-right pr-3">{{ trans('actions') }}</th>
+                <th class="text-end pr-3">{{ trans('actions') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -323,7 +323,7 @@
                 {% endif %}
                 <tr class="{{ trClass }} item-plugin">
                     <td class="plugin-name">{{ plugin.name }}</td>
-                    <td class="text-right">
+                    <td class="text-end">
                         {% if plugin.version == 0 %}
                             <span class="text-danger">v{{ plugin.version }}</span>
                         {% elseif plugin.version < 1 %}
@@ -346,7 +346,7 @@
                             </div>
                         {% endfor %}
                     </td>
-                    <td class="text-right text-nowrap">
+                    <td class="text-end text-nowrap">
                         {% if plugin.hasUpdate() %}
                             <a href="Updater" class="btn btn-spin-action btn-sm btn-info mr-1"
                                title="{{ trans('updater') }}">
@@ -365,7 +365,7 @@
                             {% if plugin.hasUpdate() %}
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-warning dropdown-toggle"
-                                            data-toggle="dropdown" aria-expanded="false">
+                                            data-bs-toggle="dropdown" aria-expanded="false">
                                         {{ trans('enable') }}
                                     </button>
                                     <div class="dropdown-menu">

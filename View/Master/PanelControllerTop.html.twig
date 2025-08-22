@@ -24,7 +24,7 @@
     {% set pageData = fsc.getPageData() %}
     {% set firstView = fsc.views | first %}
     <div class="pt-3 container-fluid d-print-none">
-        <div class="form-row">
+        <div class="row">
             <div class="col-md-12">
                 {# -- Hidden alternative page info -- #}
                 <nav aria-label="breadcrumb">
@@ -51,7 +51,7 @@
                 </nav>
             </div>
         </div>
-        <div class="form-row">
+        <div class="row">
             {# -- Top left buttons -- #}
             <div class="col-md-8 mb-2">
                 <div class="btn-group">
@@ -84,12 +84,12 @@
                 {% endfor %}
             </div>
             {# -- Top right text -- #}
-            <div class="col-md d-none d-md-inline-block text-right">
+            <div class="col-md d-none d-md-inline-block text-end">
                 {% set image = fsc.getImageUrl() %}
                 {% if image is empty %}
-                    <i class="{{ pageData.icon }} fa-3x pl-3 float-right" aria-hidden="true"></i>
+                    <i class="{{ pageData.icon }} fa-3x ps-3 float-end" aria-hidden="true"></i>
                 {% else %}
-                    <img src="{{ image }}" alt="{{ fsc.title }}" class="img-thumbnail ml-3 mb-2 float-right"/>
+                    <img src="{{ image }}" alt="{{ fsc.title }}" class="img-thumbnail ml-3 mb-2 float-end"/>
                 {% endif %}
                 <h1 class="h5 mb-0">{{ trans(pageData.title) }}</h1>
                 {% if fsc.hasData %}
@@ -107,7 +107,7 @@
             <li class="nav-item">
                 <a class="nav-link rounded-pill{{ active }}{{ disable }}"
                    id="pill-{{ viewName }}-tab"
-                   data-toggle="pill"
+                   data-bs-toggle="pill"
                    href="#pill-{{ viewName }}"
                    role="tab"
                    aria-controls="pill-{{ viewName }}">
@@ -125,7 +125,7 @@
             <li class="nav-item">
                 {% set active = (viewName == fsc.active) ? ' active' : '' %}
                 {% set disable = view.settings.active ? '' : ' disabled' %}
-                <a href="#{{ viewName }}" class="nav-link{{ active }}{{ disable }}" data-toggle="tab" role="tab"
+                <a href="#{{ viewName }}" class="nav-link{{ active }}{{ disable }}" data-bs-toggle="tab" role="tab"
                    aria-controls="{{ viewName }}">
                     <i class="{{ view.icon }}" aria-hidden="true"></i>
                     <span class="d-none d-sm-inline-block">{{ view.title }}</span>
@@ -171,7 +171,7 @@
     {% if show and firstView.settings.btnOptions %}
         <div class="btn-group">
             <div class="dropdown">
-                <button class="btn btn-sm btn-secondary mr-3 dropdown-toggle" type="button" data-toggle="dropdown"
+                <button class="btn btn-sm btn-secondary mr-3 dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-wrench fa-fw" aria-hidden="true"></i>
                     <span class="d-none d-lg-inline-block">{{ trans('options') }}</span>
@@ -202,10 +202,10 @@
             <span class="d-none d-lg-inline-block">{{ trans('print') }}</span>
         </a>
         <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="sr-only">{{ trans('more') }}</span>
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="visually-hidden">{{ trans('more') }}</span>
         </button>
-        <div class="dropdown-menu dropdown-menu-right">
+        <div class="dropdown-menu dropdown-menu-end">
             {% for key, option in fsc.exportManager.options() %}
                 {% if key != fsc.exportManager.defaultOption() %}
                     <a href="{{ firstView.model.url() }}&action=export&option={{ key }}" class="dropdown-item">
@@ -215,7 +215,7 @@
                 {% endif %}
             {% endfor %}
             <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#advancedExportModal">
+            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#advancedExportModal">
                 <i class="fas fa-tools fa-fw" aria-hidden="true"></i>
                 {{ trans('advanced') }}
             </a>
@@ -231,7 +231,7 @@
             {% endif %}
         </div>
     </div>
-    <form action="{{ firstView.model.url() }}" method="post" class="float-left" target="_blank"
+    <form action="{{ firstView.model.url() }}" method="post" class="float-start" target="_blank"
           onsubmit="animateSpinner('add')">
         <input type="hidden" name="action" value="export"/>
         <div class="modal fade" id="advancedExportModal" tabindex="-1" aria-hidden="true">
@@ -274,7 +274,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="text-right">
+                        <div class="text-end">
                             <button type="submit" class="btn btn-primary">
                                 {{ trans('accept') }}
                             </button>
