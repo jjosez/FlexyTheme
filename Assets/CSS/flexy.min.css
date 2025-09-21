@@ -241,3 +241,8 @@ body {
     bottom: 20px;
     font-size: 0.6rem;
 }
+
+.fs-line {
+    padding-top: 0 !important;
+    padding-bottom: .25rem !important;
+}
