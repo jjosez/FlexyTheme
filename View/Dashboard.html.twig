@@ -41,7 +41,8 @@
                     </h1>
                 </div>
                 <div class="me-lg-auto col-sm-12 col-md-6 justify-content-between">
-                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#modalNews">
+                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal"
+                            data-bs-target="#modalNews">
                         <i class="fa-solid fa-newspaper"></i> {{ trans('news') }}
                     </button>
                     {% if fsc.showBackupWarning() %}
@@ -50,7 +51,8 @@
                             <i class="fa-solid fa-warning"></i> {{ trans('dashboard-backup') }}
                         </button>
                     {% endif %}
-                    <button type="button" class="btn btn-secondary mb-1" data-bs-toggle="modal" data-bs-target="#modalHelp">
+                    <button type="button" class="btn btn-secondary mb-1" data-bs-toggle="modal"
+                            data-bs-target="#modalHelp">
                         <i class="fa-solid fa-circle-question"></i> {{ trans('help') }}
                     </button>
                 </div>
@@ -144,10 +146,10 @@
                             <small class="text-muted">{{ trans('minimum-stock') }}: {{ number(stock.stockmin) }}</small>
                             <small class="text-muted">{{ trans('available') }}: {{ number(stock.disponible) }}</small>
                         </div>
-                       {# <div class="text-muted">
+                        {# <div class="text-muted">
                             <small class="text-muted">{{ trans('minimum-stock') }}: {{ number(stock.stockmin) }}</small>
                             <small class="text-muted">{{ trans('available') }}: {{ number(stock.disponible) }}</small>
-                        </div>#}
+                        </div> #}
                     </div>
                     <a href="{{ receipt.url() }}" class="btn btn-sm btn-outline-primary" title="{{ trans('open') }}">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
@@ -246,9 +248,7 @@
                     <h3 class="modal-title">
                         <i class="fa-solid fa-save me-2"></i>{{ trans('dashboard-backup') }}
                     </h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-dark">
                     <p class="card-text">{{ trans('dashboard-backup-p') }}</p>
@@ -278,9 +278,7 @@
                     <h3 class="modal-title">
                         <i class="fa-solid fa-circle-question me-2"></i>{{ trans('help') }}
                     </h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-dark">
                     <ul class="mb-1">
@@ -319,9 +317,7 @@
             <div class="modal-content shadow">
                 <div class="modal-header">
                     <h3 class="modal-title">{{ trans('news') }}</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {% for news in fsc.news %}

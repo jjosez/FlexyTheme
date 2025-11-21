@@ -1,7 +1,7 @@
 {#
 /**
  * This file is part of FacturaScripts
- * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 
 {% block bodyHeaderOptions %}
     {{ parent() }}
-    <div class="container-fluid d-print-none mb-2">
+    <div class="container-fluid mb-2">
         <div class="row">
             <div class="col-sm-6">
                 <div class="btn-group">
@@ -37,7 +37,7 @@
                     {% else %}
                         <a class="btn btn-sm btn-secondary" href="{{ fsc.url() }}?defaultPage=TRUE"
                            title="{{ trans('mark-as-homepage') }}">
-                            <i class="far fa-bookmark" aria-hidden="true"></i>
+                            <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
                         </a>
                     {% endif %}
                 </div>
@@ -93,11 +93,12 @@
         <div class="tab-pane fade show active" id="installed" role="tabpanel">
             {{ _self.showInstalledPlugins(fsc) }}
             {% if fsc.updated == false %}
-                <div class="ml-2 mt-3 mr-2 mb-3">
+                <div class="ms-2 mt-4 me-2 mb-3">
                     {{ Utils.updateInstall() }}
                 </div>
             {% elseif fsc.registered == false %}
-                <div class="ml-2 mt-3 mr-2 mb-3">
+                <hr/>
+                <div class="ms-2 mt-4 me-2 mb-3">
                     {{ Utils.registerInstall() }}
                 </div>
             {% endif %}
@@ -120,29 +121,27 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">
-                                <i class="fa-solid fa-file-zipper mr-2"></i> {{ trans('add-new-plugin') }}
+                                <i class="fa-solid fa-file-zipper me-2"></i> {{ trans('add-new-plugin') }}
                             </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('close') }}">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ trans('close') }}"></button>
                         </div>
                         {% if fsc.getMaxFileUpload() < 99 %}
-                            <div class="alert alert-warning mb-0">
+                            <div class="alert alert-dismissible alert-warning mb-0">
                                 {{ trans('help-server-accepts-filesize', {'%size%': fsc.getMaxFileUpload()}) }}
                             </div>
                         {% endif %}
                         <div class="modal-body">
-                            <div class="form-group">
-                                {{ trans('select-plugin-zip-file') }}<br/>
-                                <input type="file" name="plugin[]" accept="application/zip" multiple required/>
+                            <div class="mb-3">
+                                <label class="form-label">{{ trans('select-plugin-zip-file') }}</label>
+                                <input type="file" name="plugin[]" class="form-control" accept="application/zip" multiple required/>
                                 {% if fsc.getMaxFileUpload() >= 99 %}
-                                    <small class="form-text text-muted">
+                                    <div class="form-text">
                                         {{ trans('help-server-accepts-filesize', {'%size%': fsc.getMaxFileUpload()}) }}
-                                    </small>
+                                    </div>
                                 {% endif %}
                             </div>
                             <div class="text-end mt-5">
-                                <button type="button" class="btn btn-spin-action btn-secondary" data-dismiss="modal">
+                                <button type="button" class="btn btn-spin-action btn-secondary" data-bs-dismiss="modal">
                                     {{ trans('cancel') }}
                                 </button>
                                 <button type="submit" class="btn btn-spin-action btn-success">
@@ -162,31 +161,64 @@
     {% if config('disable_rm_plugins', false) == false %}
         <script>
             function deletePlugin(pluginName) {
-                bootbox.confirm({
-                    title: "{{ trans('confirm-delete')|raw }}",
-                    message: "{{ trans('are-you-sure') }}",
-                    closeButton: false,
-                    buttons: {
-                        cancel: {
-                            label: "<i class='fa-solid fa-times'></i> {{ trans('cancel') }}"
-                        },
-                        confirm: {
-                            label: "<i class='fa-solid fa-check'></i> {{ trans('delete') }}",
-                            className: 'btn-danger'
-                        }
-                    },
-                    callback: function (result) {
-                        if (result) {
-                            animateSpinner('add');
-                            window.location = "{{ fsc.url() }}?action=remove" + "\u0026" + "plugin=" + pluginName
-                                + "\u0026" + "multireqtoken={{ formToken(false) }}";
-                        }
-                    }
+                // Si ya existe un modal con el ID 'dynamicAdminPluginsDeleteModal', lo eliminamos
+                const existingModal = document.getElementById('dynamicAdminPluginsDeleteModal');
+                if (existingModal) {
+                    existingModal.remove();
+                }
+
+                const adminPluginsDeleteCancel = "{{ trans('cancel') }}";
+                const adminPluginsDeleteConfirm = "{{ trans('delete') }}";
+                const adminPluginsDeleteMessage = "{{ trans('are-you-sure') }}";
+                const adminPluginsDeleteTitle = "{{ trans('confirm-delete')|raw }}";
+
+                // Crear el HTML del modal como string usando los parámetros
+                const modalHTML = `
+                    <div class="modal fade" id="dynamicAdminPluginsDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dynamicAdminPluginsDeleteModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="dynamicAdminPluginsDeleteModalLabel">${adminPluginsDeleteTitle}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            ${adminPluginsDeleteMessage}
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-spin-action" data-bs-dismiss="modal">${adminPluginsDeleteCancel}</button>
+                            <button type="button" id="saveDynamicAdminPluginsDeleteModalBtn" class="btn btn-danger btn-spin-action">${adminPluginsDeleteConfirm}</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+
+                // Insertar el modal en el body
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+                // Crear una instancia del modal y mostrarlo
+                const myModal = new bootstrap.Modal(document.getElementById('dynamicAdminPluginsDeleteModal'));
+                myModal.show();
+
+                // Añadir comportamiento al botón de "Guardar cambios"
+                document.getElementById('saveDynamicAdminPluginsDeleteModalBtn').addEventListener('click', function () {
+                    // Ejecutar la acción de eliminar
+                    animateSpinner('add');
+                    window.location = "{{ fsc.url() }}?action=remove" + "\u0026" + "plugin=" + pluginName
+                        + "\u0026" + "multireqtoken={{ formToken(false) }}";
+
+                    // Cierra el modal
+                    myModal.hide();
+                });
+
+                // Eliminar el modal del DOM cuando se cierra
+                document.getElementById('dynamicAdminPluginsDeleteModal').addEventListener('hidden.bs.modal', function () {
+                    document.getElementById('dynamicAdminPluginsDeleteModal').remove();
                 });
             }
 
             $(document).ready(function () {
-                searchList('#querySearchPlugin', '#all-plugins .card', '.card-title');
+                searchList('#querySearchPlugin', '#all-plugins .wrapper-card', '.card-title');
                 searchList('#querySearchInstalledPlugins', '#installed-plugins .item-plugin', '.plugin-name');
 
                 // si los archivos son demasiado grandes, no se pueden subir
@@ -220,34 +252,34 @@
 {% macro healthStatus(value) %}
     {% if value < 1 %}
         <i class="fa-solid fa-heart-broken"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
     {% elseif value < 2 %}
         <i class="fa-solid fa-heart"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
     {% elseif value < 3 %}
         <i class="fa-solid fa-heart"></i>
         <i class="fa-solid fa-heart"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
     {% elseif value < 4 %}
         <i class="fa-solid fa-heart"></i>
         <i class="fa-solid fa-heart"></i>
         <i class="fa-solid fa-heart"></i>
-        <i class="far fa-heart"></i>
-        <i class="far fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
     {% elseif value < 5 %}
         <i class="fa-solid fa-heart"></i>
         <i class="fa-solid fa-heart"></i>
         <i class="fa-solid fa-heart"></i>
         <i class="fa-solid fa-heart"></i>
-        <i class="far fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
     {% else %}
         <i class="fa-solid fa-heart"></i>
         <i class="fa-solid fa-heart"></i>
@@ -261,20 +293,22 @@
     <div class="p-2">
         <input type="text" class="form-control shadow-sm" id="querySearchPlugin" placeholder="{{ trans('search') }}"/>
     </div>
-    <div class="card-columns pl-2 pr-2" id="all-plugins">
+    <div class="row row-cols-3 ps-2 pe-2" id="all-plugins">
         {% for plugin in fsc.remotePluginList %}
             {% set extraClass = plugin.health > 2 ? 'border-success' : plugin.health == 0 ? 'border-danger' : 'border-warning' %}
-            <div class="card {{ extraClass }} shadow-sm" id="{{ plugin.idplugin }}">
-                <div class="card-body p-2">
-                    <h5 class="card-title">{{ plugin.name }} v{{ plugin.version }}</h5>
-                    <p class="card-text">{{ plugin.description | slice(0, 300) | nl2br }}</p>
-                </div>
-                <div class="card-footer p-2">
-                    {% set extraBtnClass = plugin.health > 2 ? 'btn-outline-success' : plugin.health == 0 ? 'btn-outline-danger' : 'btn-outline-warning' %}
-                    <a href="{{ plugin.url }}" class="btn {{ extraBtnClass }}" target="_blank">{{ trans('add') }}</a>
-                    <span class="ml-2 text-danger" title="{{ trans('health') }}">
-                        {{ _self.healthStatus(plugin.health) }}
-                    </span>
+            <div class="col mb-2 wrapper-card">
+                <div class="card {{ extraClass }} shadow-sm h-100" id="{{ plugin.idplugin }}">
+                    <div class="card-body p-2">
+                        <h5 class="card-title">{{ plugin.name }} v{{ plugin.version }}</h5>
+                        <p class="card-text">{{ plugin.description | slice(0, 300) | nl2br }}</p>
+                    </div>
+                    <div class="card-footer p-2">
+                        {% set extraBtnClass = plugin.health > 2 ? 'btn-outline-success' : plugin.health == 0 ? 'btn-outline-danger' : 'btn-outline-warning' %}
+                        <a href="{{ plugin.url }}" class="btn {{ extraBtnClass }}" target="_blank">{{ trans('add') }}</a>
+                        <span class="ms-2 text-danger" title="{{ trans('health') }}">
+                            {{ _self.healthStatus(plugin.health) }}
+                        </span>
+                    </div>
                 </div>
             </div>
         {% else %}
@@ -296,7 +330,7 @@
         {{ _self.tablePlugins(fsc.pluginList | filter(plugin => plugin.enabled)|sort((a, b) => a.order <=> b.order), fsc.url()) }}
     </div>
 
-    <div class="card border-dark m-2">
+    <div class="card border-dark m-2 mb-4">
         <div class="card-header border-dark">{{ trans('disabled-plugins') }}</div>
         {{ _self.tablePlugins(fsc.pluginList | filter(plugin => plugin.enabled == false), fsc.url()) }}
     </div>
@@ -310,7 +344,7 @@
                 <th>{{ trans('name') }}</th>
                 <th class="text-end">{{ trans('version') }}</th>
                 <th>{{ trans('description') }}</th>
-                <th class="text-end pr-3">{{ trans('actions') }}</th>
+                <th class="text-end pe-3">{{ trans('actions') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -335,7 +369,7 @@
                     <td>
                         {{ plugin.description | nl2br }}
                         {% if plugin.forja('url', '') %}
-                            <a href="{{ plugin.forja('url', '') }}" target="_blank" class="ml-2">
+                            <a href="{{ plugin.forja('url', '') }}" target="_blank" class="ms-2">
                                 {{ trans('more') }} <i class="fa-solid fa-external-link-alt"></i>
                             </a>
                         {% endif %}
@@ -348,7 +382,7 @@
                     </td>
                     <td class="text-end text-nowrap">
                         {% if plugin.hasUpdate() %}
-                            <a href="Updater" class="btn btn-spin-action btn-sm btn-info mr-1"
+                            <a href="Updater" class="btn btn-spin-action btn-sm btn-info me-1"
                                title="{{ trans('updater') }}">
                                 <i class="fa-solid fa-cloud-download-alt" aria-hidden="true"></i>
                             </a>
@@ -356,7 +390,7 @@
                         {% if plugin.enabled %}
                             <a class="btn btn-sm btn-secondary btn-spin-action" onclick="animateSpinner('add');"
                                href="{{ url }}?action=disable&amp;plugin={{ plugin.name }}&amp;multireqtoken={{ formToken(false) }}">
-                                <i class="fa-solid fa-toggle-off mr-1" aria-hidden="true"></i>
+                                <i class="fa-solid fa-toggle-off me-1" aria-hidden="true"></i>
                                 <span class="d-none d-sm-inline-block">{{ trans('disable') }}</span>
                             </a>
                             <br/>
@@ -370,13 +404,13 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="Updater">
-                                            <i class="fa-solid fa-cloud-download-alt fa-fw mr-1" aria-hidden="true"></i>
+                                            <i class="fa-solid fa-cloud-download-alt fa-fw me-1" aria-hidden="true"></i>
                                             {{ trans('update') }}
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item"
                                            href="{{ url }}?action=enable&amp;plugin={{ plugin.name }}&amp;multireqtoken={{ formToken(false) }}">
-                                            <i class="fa-solid fa-check fa-fw mr-1" aria-hidden="true"></i>
+                                            <i class="fa-solid fa-check fa-fw me-1" aria-hidden="true"></i>
                                             {{ trans('enable') }}
                                         </a>
                                     </div>
@@ -384,7 +418,7 @@
                             {% else %}
                                 <a class="btn btn-sm btn-success btn-spin-action" onclick="animateSpinner('add');"
                                    href="{{ url }}?action=enable&amp;plugin={{ plugin.name }}&amp;multireqtoken={{ formToken(false) }}">
-                                    <i class="fa-solid fa-toggle-on mr-1" aria-hidden="true"></i>
+                                    <i class="fa-solid fa-toggle-on me-1" aria-hidden="true"></i>
                                     <span class="d-none d-sm-inline-block">{{ trans('enable') }}</span>
                                 </a>
                             {% endif %}
@@ -392,7 +426,7 @@
                             {{ plugin.compatibilityDescription() }}
                         {% endif %}
                         {% if plugin.enabled == false and config('disable_rm_plugins', false) == false %}
-                            <a class="btn btn-sm btn-danger ml-2 btn-spin-action" href="#"
+                            <a class="btn btn-sm btn-danger ms-2 btn-spin-action" href="#"
                                title="{{ trans('delete') }}" onclick="deletePlugin('{{ plugin.name }}');">
                                 <i class="fa-solid fa-trash-alt" aria-hidden="true"></i>
                             </a>
