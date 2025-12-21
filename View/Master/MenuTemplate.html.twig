@@ -49,7 +49,7 @@
 
         <!-- Flexy Theme -->
         <link rel="stylesheet" href="{{ asset('Plugins/FlexyTheme/Assets/CSS/styles.min.css') }}?v={{ 'now' | date('ymd') }}"/>
-        <link rel="stylesheet" href="{{ asset('Plugins/FlexyTheme/Assets/CSS/flexy.min.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('Plugins/FlexyTheme/Assets/CSS/flexy.min.css') }}?v={{ 'now' | date('ymd') }}"/>
     {% endblock %}
     {# Adds custom CSS assets #}
     {% for css in assetManager.get('css') %}

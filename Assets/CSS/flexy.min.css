@@ -42,12 +42,6 @@ body {
     overflow-x: hidden;
 }
 
-/*
-.body-wrapper .body-wrapper-inner .container-fluid.d-print-none {
-    padding: 0 0 20px
-}
-*/
-
 .body-wrapper .container-fluid,
 .body-wrapper .container-sm,
 .body-wrapper .container-md,
@@ -206,7 +200,6 @@ body {
     background-color: #a8bbbf;
 }
 
-/*Custom */
 #cart.card.border-secondary.shadow-sm {
     background-color: #f9f9f9;
     border-width: 2px;
@@ -221,21 +214,18 @@ body {
     padding: 0 0.5rem;
 }
 
-/* Ajusta el botón para parecerse a un ícono de barra superior */
 .app-header .nav-link.pointer {
-    color: #fff; /* o el color que uses en tu navbar */
+    color: #fff;
     padding: 0.5rem;
     display: flex;
     align-items: center;
     font-size: 1.2rem;
 }
 
-/* Estilo adicional para el ícono de campana */
 .app-header #notificationsIcon .fa-bell {
     font-size: 1.2rem;
 }
 
-/* Posiciona el circulito rojo correctamente */
 .app-header #notificationsIcon .fa-circle {
     position: absolute;
     bottom: 20px;
@@ -246,170 +236,181 @@ body {
     padding-top: 0 !important;
     padding-bottom: .25rem !important;
 }
+/* ****************************************************************************************************************  */
+/* ============================================ PARCHES ESPECIFICOS ================================================ */
+/* ****************************************************************************************************************  */
 
-/* ===== Select2 x Bootstrap 4 (simple, sin blur) ===== */
-
-/* Base */
-.select2-container.select2-container--bootstrap4 { font: inherit; }
+/* ================================================ Select2 ======================================================== */
+.select2-container.select2-container--bootstrap4 {
+    font: inherit;
+}
 
 .select2-container--bootstrap4 .select2-selection--single,
 .select2-container--bootstrap4 .select2-selection--multiple {
-  border: var(--bs-border-width,1px) solid var(--bs-border-color, #ced4da) !important;
-  border-radius: var(--bs-border-radius, .375rem) !important;
-  background-color: var(--bs-body-bg, #fff);
-  color: var(--bs-body-color, #212529);
-  min-height: calc(1.5em + .75rem + 2px);
-  display: flex; align-items: center;
-  padding: .375rem .75rem;
+    border: var(--bs-border-width, 1px) solid var(--bs-border-color, #ced4da) !important;
+    border-radius: var(--bs-border-radius, .375rem) !important;
+    background-color: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #212529);
+    min-height: calc(1.5em + .75rem + 2px);
+    display: flex;
+    align-items: center;
+    padding: .375rem .75rem;
 }
 
-/* Texto renderizado */
 .select2-container--bootstrap4 .select2-selection__rendered {
-  padding: 0 !important;
-  line-height: 1.5 !important;
-  color: inherit !important;
+    padding: 0 !important;
+    line-height: 1.5 !important;
+    color: inherit !important;
 }
 
-/* Placeholder */
 .select2-container--bootstrap4 .select2-selection__placeholder {
-  color: var(--bs-secondary-color, #6c757d);
+    color: var(--bs-secondary-color, #6c757d);
 }
 
-/* Flecha */
 .select2-container--bootstrap4 .select2-selection__arrow {
-  position: absolute; right: .75rem; top: 0; bottom: 0; width: 1.25rem;
-  pointer-events: none;
+    position: absolute;
+    right: .75rem;
+    top: 0;
+    bottom: 0;
+    width: 1.25rem;
+    pointer-events: none;
 }
+
 .select2-container--bootstrap4 .select2-selection__arrow b {
-  border: 0 !important; width: 100%; height: 100%; display: block;
-  background: center / 16px 12px no-repeat;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%236c757d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
+    border: 0 !important;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: center / 16px 12px no-repeat;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%236c757d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
 }
 
 .select2-container--bootstrap4 .select2-selection__arrow {
-  right: .75rem;
-  top: 50%;
-  transform: translateY(-50%);
+    right: .75rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-
-/* Hover y focus: SIN blur */
 .select2-container--bootstrap4 .select2-selection--single:hover,
 .select2-container--bootstrap4 .select2-selection--multiple:hover {
-  border-color: var(--bs-secondary-border-subtle, #b3b7bb);
+    border-color: var(--bs-secondary-border-subtle, #b3b7bb);
 }
+
 .select2-container--bootstrap4.select2-container--focus .select2-selection--single,
 .select2-container--bootstrap4.select2-container--focus .select2-selection--multiple,
 .select2-container--bootstrap4.select2-container--open .select2-selection--single,
 .select2-container--bootstrap4.select2-container--open .select2-selection--multiple {
-  border-color: var(--bs-primary, #0d6efd) !important;
-  outline: 0;
-  box-shadow: none !important; /* sin blur */
+    border-color: var(--bs-primary, #0d6efd) !important;
+    outline: 0;
+    box-shadow: none !important;
 }
 
-/* Disabled */
 .select2-container--bootstrap4.select2-container--disabled .select2-selection--single,
 .select2-container--bootstrap4.select2-container--disabled .select2-selection--multiple {
-  background-color: var(--bs-secondary-bg, #e9ecef) !important;
-  color: var(--bs-secondary-color, #6c757d) !important;
-  cursor: not-allowed;
+    background-color: var(--bs-secondary-bg, #e9ecef) !important;
+    color: var(--bs-secondary-color, #6c757d) !important;
+    cursor: not-allowed;
 }
 
-/* Multiple (chips) */
 .select2-container--bootstrap4 .select2-selection--multiple {
-  padding: .25rem .375rem .125rem .375rem; gap: .25rem; flex-wrap: wrap;
+    padding: .25rem .375rem .125rem .375rem;
+    gap: .25rem;
+    flex-wrap: wrap;
 }
+
 .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
-  background-color: var(--bs-primary-bg-subtle, #e7f1ff);
-  border: 1px solid var(--bs-primary-border-subtle, #9ec5fe);
-  color: var(--bs-primary, #0d6efd);
-  border-radius: var(--bs-border-radius, .375rem);
-  padding: .125rem .5rem; margin-top: .125rem;
+    background-color: var(--bs-primary-bg-subtle, #e7f1ff);
+    border: 1px solid var(--bs-primary-border-subtle, #9ec5fe);
+    color: var(--bs-primary, #0d6efd);
+    border-radius: var(--bs-border-radius, .375rem);
+    padding: .125rem .5rem;
+    margin-top: .125rem;
 }
+
 .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice__remove {
-  margin-right: .25rem; color: inherit;
+    margin-right: .25rem;
+    color: inherit;
 }
 
-/* Dropdown */
 .select2-container--bootstrap4 .select2-dropdown {
-  border: 1px solid var(--bs-border-color, #ced4da);
-  border-radius: var(--bs-border-radius, .375rem);
-  background-color: var(--bs-body-bg, #fff);
-  overflow: hidden;
-}
-.select2-container--bootstrap4 .select2-search--dropdown .select2-search__field {
-  border: 1px solid var(--bs-border-color, #ced4da);
-  border-radius: var(--bs-border-radius, .375rem);
-  padding: .375rem .5rem; width: 100%; outline: 0;
-}
-.select2-container--bootstrap4 .select2-results__option {
-  padding: .5rem .75rem; line-height: 1.5;
-}
-.select2-container--bootstrap4 .select2-results__option--highlighted[aria-selected] {
-  background-color: var(--bs-primary, #0d6efd); color: #fff;
-}
-.select2-container--bootstrap4 .select2-results__option[aria-selected=true] {
-  background-color: var(--bs-primary-bg-subtle, #e7f1ff); color: var(--bs-primary, #0d6efd);
+    border: 1px solid var(--bs-border-color, #ced4da);
+    border-radius: var(--bs-border-radius, .375rem);
+    background-color: var(--bs-body-bg, #fff);
+    overflow: hidden;
 }
 
-/* (Opcional) Modo oscuro de tu tema */
+.select2-container--bootstrap4 .select2-search--dropdown .select2-search__field {
+    border: 1px solid var(--bs-border-color, #ced4da);
+    border-radius: var(--bs-border-radius, .375rem);
+    padding: .375rem .5rem;
+    width: 100%;
+    outline: 0;
+}
+
+.select2-container--bootstrap4 .select2-results__option {
+    padding: .5rem .75rem;
+    line-height: 1.5;
+}
+
+.select2-container--bootstrap4 .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--bs-primary, #0d6efd);
+    color: #fff;
+}
+
+.select2-container--bootstrap4 .select2-results__option[aria-selected=true] {
+    background-color: var(--bs-primary-bg-subtle, #e7f1ff);
+    color: var(--bs-primary, #0d6efd);
+}
+
 [data-bs-theme="dark"] .select2-container--bootstrap4 .select2-selection--single,
 [data-bs-theme="dark"] .select2-container--bootstrap4 .select2-selection--multiple {
-  background-color: var(--bs-body-bg, #1e1e1e);
-  color: var(--bs-body-color, #e9ecef);
-  border-color: var(--bs-border-color, #495057) !important;
+    background-color: var(--bs-body-bg, #1e1e1e);
+    color: var(--bs-body-color, #e9ecef);
+    border-color: var(--bs-border-color, #495057) !important;
 }
+
 [data-bs-theme="dark"] .select2-container--bootstrap4 .select2-dropdown {
-  background-color: var(--bs-body-bg, #1e1e1e);
-  border-color: var(--bs-border-color, #495057);
+    background-color: var(--bs-body-bg, #1e1e1e);
+    border-color: var(--bs-border-color, #495057);
 }
 
-/* Corrige el solapamiento de la flecha con el texto */
 .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
-  padding-right: 2rem !important; /* deja espacio para la flecha */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    padding-right: 2rem !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-/* === Select2 estilo Bootstrap === */
-/*
-.select2-container--bootstrap4 .select2-selection--single,
-.select2-container--bootstrap4 .select2-selection--multiple {
-  display: flex; align-items: center;
-  min-height: calc(1.5em + .75rem + 2px);
-  padding: .375rem .75rem;
-  border: 1px solid #ced4da !important;
-  border-radius: .375rem !important;
-  background-color: #fff;
-  color: #212529;
-}*/
+/* ============================================ jQuery UI Autocomplete ============================================ */
 
-/* Hover / Focus
-.select2-container--bootstrap4.select2-container--focus .select2-selection--single,
-.select2-container--bootstrap4.select2-container--focus .select2-selection--multiple,
-.select2-container--bootstrap4.select2-container--open .select2-selection--single,
-.select2-container--bootstrap4.select2-container--open .select2-selection--multiple {
-  border-color: #0d6efd !important;
-  box-shadow: none !important;
+.ui-autocomplete {
+    max-height: 320px;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    box-sizing: border-box;
+
+    max-width: calc(100vw - 2rem);
+    z-index: 1055;
 }
 
-/* Texto y flecha
-.select2-container--bootstrap4 .select2-selection__rendered {
-  flex: 1;
-  padding-right: 1.5rem !important;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.select2-container--bootstrap4 .select2-selection__arrow {
-  position: absolute; right: .75rem; top: 50%;
-  transform: translateY(-50%);
+.ui-autocomplete::-webkit-scrollbar {
+    width: 8px;
 }
 
-/* Dropdown
-.select2-container--bootstrap4 .select2-dropdown {
-  border: 1px solid #ced4da; border-radius: .375rem;
-  background: #fff;
+.ui-autocomplete::-webkit-scrollbar-track {
+    background: #f1f1f1;
 }
-.select2-container--bootstrap4 .select2-results__option--highlighted[aria-selected] {
-  background: #0d6efd; color: #fff;
-}*/
+
+.ui-autocomplete::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border-radius: 4px;
+}
+
+.ui-autocomplete::-webkit-scrollbar-thumb:hover {
+    background-color: #a8a8a8;
+}
+
+.ui-autocomplete {
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 #f1f1f1;
+}
