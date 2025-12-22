@@ -103,12 +103,11 @@
                 <div>
                     <div class="brand-logo d-flex justify-content-between align-items-center p-3">
                         <div class="d-xl-none d-block">
-                            <!-- Puedes poner algo aquí si quieres que haya algo a la izquierda en móvil -->
                         </div>
 
                         <a class="d-flex align-items-center mx-auto" href="{{ asset(fsc.user.homepage) }}"
                            title="{{ trans('homepage') }}">
-                            <img src="{{ asset('Dinamic/Assets/Images/logo-white.png') }}" width="64" height="64"
+                            <img src="{{- _self.loadLogo(fsc.user.getCompany().idlogo) -}}" width="64" height="64"
                                  class="d-inline-block align-top" alt="FacturaScripts">
                         </a>
 
@@ -176,3 +175,15 @@
     </body>
 {% endblock %}
 </html>
+{% macro loadLogo(idfile) -%}
+    {% apply spaceless %}
+    {% set url = 'Dinamic/Assets/Images/logo-white.png' %}
+    {% if idfile > 0 %}
+        {% set attached = attachedFile(idfile) %}
+        {% if attached.filename is not empty %}
+            {% set url = attached.url('download-permanent') %}
+        {% endif %}
+    {% endif %}
+    {{ asset(url) }}
+    {% endapply %}
+{%- endmacro loadLogo %}
