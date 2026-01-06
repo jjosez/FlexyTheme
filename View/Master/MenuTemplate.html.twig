@@ -46,14 +46,35 @@
         <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}"/>
         <link rel="stylesheet" href="{{ asset('node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}"/>
         <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/custom.css') }}?v={{ 'now' | date('ymd') }}"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+              rel="stylesheet">
 
         <!-- Flexy Theme -->
-        <link rel="stylesheet" href="{{ asset('Plugins/FlexyTheme/Assets/CSS/styles.min.css') }}?v={{ 'now' | date('ymd') }}"/>
-        <link rel="stylesheet" href="{{ asset('Plugins/FlexyTheme/Assets/CSS/flexy.min.css') }}?v={{ 'now' | date('ymd') }}"/>
+        <link rel="stylesheet"
+              href="{{ asset('Plugins/FlexyTheme/Assets/CSS/styles.min.css') }}?v={{ 'now' | date('ymd') }}"/>
+        <link rel="stylesheet"
+              href="{{ asset('Plugins/FlexyTheme/Assets/CSS/flexy.min.css') }}?v={{ 'now' | date('ymd') }}"/>
     {% endblock %}
     {# Adds custom CSS assets #}
     {% for css in assetManager.get('css') %}
         <link rel="stylesheet" href="{{ css }}"/>
+        <style>
+            table {
+                font-family: "Roboto", sans-serif;
+                font-optical-sizing: auto;
+                font-style: normal;
+                font-variation-settings: "wdth" 100;
+            }
+
+            th, td {
+                font-size: 14px; /* Tamaño de letra */
+                font-weight: normal; /* Grosor */
+                padding: 8px; /* Espaciado interno */
+                text-align: left; /* Alineación del texto */
+            }
+        </style>
     {% endfor %}
     {% for includeView in getIncludeViews('MenuTemplate', 'CssAfter') %}
         {% include includeView['path'] %}
@@ -177,13 +198,13 @@
 </html>
 {% macro loadLogo(idfile) -%}
     {% apply spaceless %}
-    {% set url = 'Dinamic/Assets/Images/logo-white.png' %}
-    {% if idfile > 0 %}
-        {% set attached = attachedFile(idfile) %}
-        {% if attached.filename is not empty %}
-            {% set url = attached.url('download-permanent') %}
+        {% set url = 'Dinamic/Assets/Images/logo-white.png' %}
+        {% if idfile > 0 %}
+            {% set attached = attachedFile(idfile) %}
+            {% if attached.filename is not empty %}
+                {% set url = attached.url('download-permanent') %}
+            {% endif %}
         {% endif %}
-    {% endif %}
-    {{ asset(url) }}
+        {{ asset(url) }}
     {% endapply %}
 {%- endmacro loadLogo %}
