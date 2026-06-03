@@ -20,32 +20,32 @@
 
 {% macro showMenu(menuItem, parent) %}
     {% import _self as macros %}
-    {% set active = menuItem.active ? ' active' : '' %}
+    {% set activeClass = menuItem.active ? ' active' : '' %}
     {% set menuId = parent is empty ? 'menu-' ~ menuItem.title|lower|replace({' ': '-'}) : parent ~ '-' ~ menuItem.name|lower %}
 
     {% if parent is empty %}
-        <li class="sidebar-item">
-            <a class="sidebar-link justify-content-between{% if menuItem.menu is not empty %} has-arrow{% endif %}"
+        <li class="sidebar-item{{ activeClass }}">
+            <a class="sidebar-link justify-content-between{% if menuItem.menu is not empty %} has-arrow{% endif %}{{ activeClass }}"
                href="{{ menuItem.menu is empty ? menuItem.url : 'javascript:void(0)' }}"
                aria-expanded="false">
                 <div class="d-flex align-items-center gap-3">
                     <span class="d-flex">
-                        {#<i class="{{ menuItem.icon|default('ti ti-circle') }}"></i>#}
-                        <i class="fa-regular fa-folder-closed fa-fw"></i>
+                        <i class="{% if menuItem.menu is not empty and menuItem.icon in ['', 'fa-solid fa-file'] %}fa-regular fa-folder-closed{% else %}{{ menuItem.icon ?: 'fa-solid fa-file' }}{% endif %} fa-fw"></i>
                     </span>
                     <span class="hide-menu">{{ menuItem.title }}</span>
                 </div>
             </a>
 
             {% if menuItem.menu is not empty %}
-            <ul aria-expanded="false" class="collapse first-level">
+            <ul aria-expanded="false" class="collapse first-level{{ menuItem.active ? ' in' : '' }}">
                 {% for item in menuItem.menu %}
+                    {% set extraClass = item.active ? ' active' : '' %}
                     {% if item.menu is empty %}
-                    <li class="sidebar-item" style="padding-left: 15px;">
-                        <a class="sidebar-link justify-content-between" href="{{ item.url }}">
+                    <li class="sidebar-item{{ extraClass }}" style="padding-left: 15px;">
+                        <a class="sidebar-link justify-content-between{{ extraClass }}" href="{{ item.url }}">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="{{ item.icon }} menu-icon"></i>
+                                    <i class="{{ item.icon ?: 'fa-solid fa-file' }} menu-icon"></i>
                                 </div>
                                 <span class="hide-menu menu-title">{{ item.title }}</span>
                             </div>
@@ -60,15 +60,38 @@
 
         </li>
     {% else %}
-        <li class="sidebar-item">
-            <a class="sidebar-link justify-content-between" href="{{ menuItem.url }}">
+        <li class="sidebar-item{{ activeClass }}">
+            <a class="sidebar-link justify-content-between{% if menuItem.menu is not empty %} has-arrow{% endif %}{{ activeClass }}"
+               href="{{ menuItem.menu is empty ? menuItem.url : 'javascript:void(0)' }}"
+               aria-expanded="false">
                 <div class="d-flex align-items-center gap-3">
                     <div class="round-16 d-flex align-items-center justify-content-center">
-                        <i class="{{ menuItem.icon|default('ti ti-circle') }}"></i>
+                        <i class="{% if menuItem.menu is not empty and menuItem.icon in ['', 'fa-solid fa-file'] %}fa-regular fa-folder-closed{% else %}{{ menuItem.icon ?: 'fa-solid fa-file' }}{% endif %} menu-icon"></i>
                     </div>
                     <span class="hide-menu">{{ menuItem.title }}</span>
                 </div>
             </a>
+            {% if menuItem.menu is not empty %}
+            <ul aria-expanded="false" class="collapse first-level{{ menuItem.active ? ' in' : '' }}">
+                {% for item in menuItem.menu %}
+                    {% set extraClass = item.active ? ' active' : '' %}
+                    {% if item.menu is empty %}
+                    <li class="sidebar-item{{ extraClass }}" style="padding-left: 30px;">
+                        <a class="sidebar-link justify-content-between{{ extraClass }}" href="{{ item.url }}">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="round-16 d-flex align-items-center justify-content-center">
+                                    <i class="{{ item.icon ?: 'fa-solid fa-file' }} menu-icon"></i>
+                                </div>
+                                <span class="hide-menu menu-title">{{ item.title }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    {% else %}
+                        {{ macros.showMenu(item, menuId) }}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}
         </li>
     {% endif %}
 {% endmacro %}

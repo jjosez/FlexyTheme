@@ -28,6 +28,11 @@
                         <i class="fa-solid fa-search" aria-hidden="true"></i>
                     </a>
                 </li>
+                <li class="nav-item" title="{{ trans('dashboard') }}">
+                    <a class="nav-link{{ template == 'Dashboard.html.twig' ? ' active' : '' }}" href="Dashboard" id="menuIconDashboard">
+                        <i class="fa-solid fa-chalkboard-teacher" aria-hidden="true"></i>
+                    </a>
+                </li>
                 <li class="nav-item" title="{{ trans('help') }}">
                     <a class="nav-link" id="menuIconHelp" rel="nofollow" target="_blank"
                        href="https://facturascripts.com/ayuda?controller={{ controllerName }}">
