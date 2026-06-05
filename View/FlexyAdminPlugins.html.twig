@@ -1,0 +1,726 @@
+{#
+/**
+ * This file is part of FacturaScripts
+ * Copyright (C) 2017-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
+ */
+#}
+{% extends "Master/MenuBghTemplate.html.twig" %}
+{% import 'Macro/Utils.html.twig' as Utils %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        :root {
+            --fp-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --fp-border: #e5e7eb;
+            --fp-border-light: #f3f4f6;
+            --fp-text: #111827;
+            --fp-text-secondary: #6b7280;
+            --fp-text-muted: #9ca3af;
+            --fp-bg: #f9fafb;
+            --fp-bg-white: #ffffff;
+            --fp-radius: 12px;
+            --fp-radius-sm: 8px;
+            --fp-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --fp-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.04);
+            --fp-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.06), 0 4px 6px rgba(0, 0, 0, 0.04);
+            --fp-green: #059669;
+            --fp-green-border: #a7f3d0;
+            --fp-gray: #6b7280;
+            --fp-gray-border: #d1d5db;
+            --fp-amber: #d97706;
+            --fp-amber-border: #fde68a;
+            --fp-red: #dc2626;
+            --fp-red-border: #fecaca;
+            --fp-blue: #2563eb;
+            --fp-blue-border: #bfdbfe;
+            --fp-indigo: #4f46e5;
+        }
+
+        .fp-title {
+            color: var(--fp-text);
+            letter-spacing: -0.02em;
+        }
+
+        .fp-subtitle {
+            color: var(--fp-text-secondary);
+        }
+
+        .fp-table-wrap {
+            overflow-x: auto;
+        }
+
+        .fp-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .fp-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .fp-table thead tr {
+            background: var(--fp-bg);
+            border-bottom: 1px solid var(--fp-border);
+        }
+
+        .fp-table th {
+            padding: 10px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--fp-text-secondary);
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .fp-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--fp-border-light);
+            color: var(--fp-text);
+        }
+
+        .fp-table tbody tr {
+            transition: background 0.1s ease;
+        }
+
+        .fp-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .fp-desc-cell {
+            max-width: 260px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-height: 1.4;
+            color: var(--fp-text-secondary);
+            font-size: 13px;
+        }
+
+        .fp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .fp-badge-active {
+            color: var(--fp-green);
+            border: 1px solid var(--fp-green-border);
+        }
+
+        .fp-badge-inactive {
+            color: var(--fp-gray);
+            border: 1px solid var(--fp-gray-border);
+        }
+
+        .fp-badge-update {
+            color: var(--fp-amber);
+            border: 1px solid var(--fp-amber-border);
+        }
+
+        .fp-badge-incompatible {
+            color: var(--fp-red);
+            border: 1px solid var(--fp-red-border);
+        }
+
+        .fp-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .fp-dot-green {
+            background: var(--fp-green);
+        }
+
+        .fp-dot-gray {
+            background: var(--fp-gray);
+        }
+
+        .fp-dot-amber {
+            background: var(--fp-amber);
+        }
+
+        .fp-dot-red {
+            background: var(--fp-red);
+        }
+
+        .fp-dep-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: default;
+        }
+
+        .fp-dep-chip-satisfied {
+            color: var(--fp-green);
+            border: 1px solid var(--fp-green-border);
+        }
+
+        .fp-dep-chip-missing {
+            color: var(--fp-red);
+            border: 1px solid var(--fp-red-border);
+        }
+
+        .fp-version-cell {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .fp-version-update {
+            color: var(--fp-amber);
+            font-weight: 500;
+        }
+
+        .fp-empty {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--fp-text-muted);
+        }
+
+        .fp-empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--fp-border);
+        }
+
+        .fp-empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--fp-text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .fp-empty-desc {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .fp-table td, .fp-table th {
+                padding: 8px 10px;
+            }
+
+            .fp-desc-cell {
+                max-width: 120px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% set totalPlugins = fsc.pluginList | length %}
+    {% set activePlugins = fsc.pluginList | filter(p => p.enabled) | length %}
+    {% set inactivePlugins = fsc.pluginList | filter(p => p.enabled == false and p.compatible) | length %}
+    {% set incompatiblePlugins = fsc.pluginList | filter(p => p.enabled == false and p.compatible == false) | length %}
+    {% set updatePlugins = fsc.pluginList | filter(p => p.hasUpdate()) | length %}
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 py-4 pb-2">
+            <div>
+                <a href="{{ fsc.url() }}" class="btn btn-outline-secondary" title="{{ trans('refresh') }}">
+                    <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                </a>
+                {% if config('disable_add_plugins', false) == false %}
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                            data-bs-target="#modalAddPlugin">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                        {{ trans('explore-more-plugins') }}
+                    </button>
+                {% endif %}
+                <a href="{{ fsc.url() }}?action=rebuild&multireqtoken={{ formToken(false) }}"
+                   onclick="animateSpinner('add')" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                    {{ trans('rebuild') }}
+                </a>
+            </div>
+            <div class="text-end">
+                <h1 class="fp-title h4 fw-bold mb-1">
+                    <i class="{{ fsc.getPageData()['icon'] }} me-2" aria-hidden="true"></i>
+                    {{ trans(fsc.getPageData()['title']) | capitalize }}
+                </h1>
+                <p class="fp-subtitle small m-0">{{ trans('manage-installed-plugins') }}</p>
+            </div>
+        </div>
+        <div class="row row-cols-2 row-cols-lg-5 g-3 mb-4">
+            {{ _self.statCard('bg-primary-subtle', 'text-primary', 'fa-solid fa-plug', 'var(--fp-blue)', totalPlugins, trans('total-installed')) }}
+            {{ _self.statCard('bg-success-subtle', 'text-success', 'fa-solid fa-circle-check', 'var(--fp-green)', activePlugins, trans('active')) }}
+            {{ _self.statCard('bg-body-secondary', 'text-light', 'fa-regular fa-circle', 'var(--fp-gray)', inactivePlugins, trans('inactive')) }}
+            {{ _self.statCard('bg-warning-subtle', 'text-warning', 'fa-solid fa-cloud-arrow-down', 'var(--fp-amber)', updatePlugins, trans('updates-available')) }}
+            {{ _self.statCard('bg-danger-subtle', 'text-danger', 'fa-solid fa-triangle-exclamation', 'var(--fp-red)', incompatiblePlugins, trans('incompatible')) }}
+        </div>
+
+        <div class="d-flex flex-column flex-md-row flex-wrap align-items-stretch align-items-md-center gap-2 mb-3">
+            <ul class="nav nav-pills" id="filterTabs">
+                <li class="nav-item">
+                    <button class="nav-link active small fw-medium px-2 py-1" data-filter="active">
+                        {{ trans('active') }}
+                        <span class="badge bg-secondary ms-1">{{ activePlugins }}</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link small fw-medium px-2 py-1" data-filter="inactive">
+                        {{ trans('inactive') }}
+                        <span class="badge bg-secondary ms-1">{{ inactivePlugins }}</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link small fw-medium px-2 py-1" data-filter="update">
+                        {{ trans('updates') }}
+                        <span class="badge bg-secondary ms-1">{{ updatePlugins }}</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link small fw-medium px-2 py-1" data-filter="incompatible">
+                        {{ trans('incompatible') }}
+                        <span class="badge bg-secondary ms-1">{{ incompatiblePlugins }}</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link small fw-medium px-2 py-1" data-filter="all">
+                        {{ trans('all') }}
+                        <span class="badge bg-secondary ms-1">{{ totalPlugins }}</span>
+                    </button>
+                </li>
+            </ul>
+            <div class="input-group" style="min-width:200px;max-width:320px;flex:1;">
+                <input class="form-control" type="text" id="fpSearch" autocomplete="off"
+                       placeholder="{{ trans('search') }}">
+                <button class="btn btn-secondary" type="button" id="fpSearchBtn">
+                    <i class="fa-solid fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="card border shadow-sm" style="border-radius:12px;overflow:hidden;">
+            <div class="card-body p-0">
+                <div class="fp-table-view" id="tableView">
+                    <div class="fp-table-wrap">
+                        <table class="fp-table table table-hover w-100 small" id="pluginTable">
+                            <thead>
+                            <tr>
+                                <th>{{ trans('plugin') }}</th>
+                                <th>{{ trans('description') }}</th>
+                                <th>{{ trans('status') }}</th>
+                                <th>{{ trans('dependencies') }}</th>
+                                <th>{{ trans('version') }}</th>
+                                <th>{{ trans('actions') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="pluginTableBody">
+                            {% for plugin in fsc.pluginList | sort((a, b) => a.order <=> b.order) %}
+                                {{ _self.pluginTableRow(plugin, fsc.url()) }}
+                            {% else %}
+                                <tr class="fp-empty-row">
+                                    <td colspan="6">
+                                        <div class="fp-empty">
+                                            <div class="fp-empty-icon"><i class="fa-solid fa-plug"
+                                                                          aria-hidden="true"></i></div>
+                                            <div class="fp-empty-title">{{ trans('no-plugins-found') }}</div>
+                                            <div class="fp-empty-desc">{{ trans('no-plugins-description') }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if fsc.updated == false %}
+            {{ Utils.updateInstall() }}
+        {% elseif fsc.registered == false %}
+            {{ Utils.registerInstall() }}
+        {% endif %}
+    </div>
+
+    {% if config('disable_add_plugins', false) == false %}
+        <form action="{{ fsc.url() }}" class="form" enctype="multipart/form-data" id="f_add_plugins" method="post"
+              name="upload-plugins" onsubmit="animateSpinner('add')">
+            {{ formToken() }}
+            <input type="hidden" name="action" value="upload"/>
+            <div class="modal fade" id="modalAddPlugin" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa-solid fa-file-zipper me-2"></i> {{ trans('add-new-plugin') }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="{{ trans('close') }}"></button>
+                        </div>
+                        {% if fsc.getMaxFileUpload() < 99 %}
+                            <div class="alert alert-dismissible alert-warning mb-0">
+                                {{ trans('help-server-accepts-filesize', {'%size%': fsc.getMaxFileUpload()}) }}
+                            </div>
+                        {% endif %}
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">{{ trans('select-plugin-zip-file') }}</label>
+                                <input type="file" name="plugin[]" class="form-control" accept="application/zip"
+                                       multiple required/>
+                                {% if fsc.getMaxFileUpload() >= 99 %}
+                                    <div class="form-text">
+                                        {{ trans('help-server-accepts-filesize', {'%size%': fsc.getMaxFileUpload()}) }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="text-end mt-5">
+                                <button type="button" class="btn btn-spin-action btn-secondary" data-bs-dismiss="modal">
+                                    {{ trans('cancel') }}
+                                </button>
+                                <button type="submit" class="btn btn-spin-action btn-success">
+                                    {{ trans('continue') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let pluginActionRunning = false;
+
+        function pluginAction(url, el) {
+            if (pluginActionRunning) return false;
+            pluginActionRunning = true;
+            document.querySelectorAll('#pluginTable input, #pluginTable .btn').forEach(function (item) {
+                item.setAttribute('disabled', 'disabled');
+                item.classList.add('disabled');
+                item.style.pointerEvents = 'none';
+            });
+            const cell = el ? el.closest('td') : null;
+            if (cell) {
+                cell.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-lg text-primary" aria-hidden="true"></i>';
+            }
+            window.location = url;
+            return false;
+        }
+
+        function deletePlugin(pluginName) {
+            const existingModal = document.getElementById('dynamicAdminPluginsDeleteModal');
+            if (existingModal) existingModal.remove();
+
+            const adminPluginsDeleteCancel = "{{ trans('cancel') }}";
+            const adminPluginsDeleteConfirm = "{{ trans('delete') }}";
+            const adminPluginsDeleteMessage = "{{ trans('are-you-sure') }}";
+            const adminPluginsDeleteTitle = "{{ trans('confirm-delete')|raw }}";
+
+            const modalHTML = `
+                <div class="modal fade" id="dynamicAdminPluginsDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dynamicAdminPluginsDeleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="dynamicAdminPluginsDeleteModalLabel">${adminPluginsDeleteTitle}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">${adminPluginsDeleteMessage}</div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-spin-action" data-bs-dismiss="modal">${adminPluginsDeleteCancel}</button>
+                        <button type="button" id="saveDynamicAdminPluginsDeleteModalBtn" class="btn btn-danger btn-spin-action">${adminPluginsDeleteConfirm}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            const myModal = new bootstrap.Modal(document.getElementById('dynamicAdminPluginsDeleteModal'));
+            myModal.show();
+            document.getElementById('saveDynamicAdminPluginsDeleteModalBtn').addEventListener('click', function () {
+                animateSpinner('add');
+                window.location = "{{ fsc.url() }}?action=remove" + "\u0026" + "plugin=" + pluginName
+                    + "\u0026" + "multireqtoken={{ formToken(false) }}";
+                myModal.hide();
+            });
+            document.getElementById('dynamicAdminPluginsDeleteModal').addEventListener('hidden.bs.modal', function () {
+                document.getElementById('dynamicAdminPluginsDeleteModal').remove();
+            });
+        }
+
+        function getPluginRows() {
+            return document.querySelectorAll('#pluginTableBody tr[data-plugin]');
+        }
+
+        function getVisibleTableRows() {
+            return Array.from(getPluginRows()).filter(function (r) {
+                return r.style.display !== 'none';
+            });
+        }
+
+        function filterPlugins() {
+            const activeTab = document.querySelector('#filterTabs .nav-link.active');
+            const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+            const query = document.getElementById('fpSearch').value.toLowerCase().trim();
+
+            getPluginRows().forEach(function (row) {
+                const enabled = row.getAttribute('data-enabled') === '1';
+                const compatible = row.getAttribute('data-compatible') === '1';
+                const hasUpdate = row.getAttribute('data-has-update') === '1';
+                const name = (row.getAttribute('data-name') || '').toLowerCase();
+                const desc = (row.getAttribute('data-desc') || '').toLowerCase();
+
+                let show = true;
+                if (filter === 'active') show = enabled;
+                else if (filter === 'inactive') show = !enabled && compatible;
+                else if (filter === 'update') show = hasUpdate;
+                else if (filter === 'incompatible') show = !enabled && !compatible;
+
+                if (show && query) {
+                    show = name.includes(query) || desc.includes(query);
+                }
+                row.style.display = show ? '' : 'none';
+            });
+
+            updateEmptyState();
+        }
+
+        function updateEmptyState() {
+            const visible = getVisibleTableRows().length;
+            const container = document.getElementById('pluginTableBody');
+            let emptyEl = container.querySelector('.fp-empty-row');
+            if (visible === 0) {
+                if (!emptyEl) {
+                    const tr = document.createElement('tr');
+                    tr.className = 'fp-empty-row';
+                    tr.innerHTML = '<td colspan="6"><div class="fp-empty">'
+                        + '<div class="fp-empty-icon"><i class="fa-solid fa-plug"></i></div>'
+                        + '<div class="fp-empty-title">{{ trans('no-plugins-found') }}</div>'
+                        + '<div class="fp-empty-desc">{{ trans('no-plugins-description') }}</div>'
+                        + '<button class="btn btn-outline-secondary" onclick="clearFilters()">{{ trans('clear-filters') }}</button>'
+                        + '</div></td>';
+                    container.appendChild(tr);
+                }
+            } else {
+                if (emptyEl) emptyEl.remove();
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('fpSearch').value = '';
+            document.querySelectorAll('#filterTabs .nav-link').forEach(function (t) {
+                t.classList.remove('active');
+            });
+            document.querySelector('#filterTabs .nav-link[data-filter="all"]').classList.add('active');
+            filterPlugins();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterTabs = document.querySelectorAll('#filterTabs .nav-link');
+            filterTabs.forEach(function (tab) {
+                tab.addEventListener('click', function () {
+                    filterTabs.forEach(function (t) {
+                        t.classList.remove('active');
+                    });
+                    tab.classList.add('active');
+                    filterPlugins();
+                });
+            });
+
+            document.getElementById('fpSearch').addEventListener('input', function () {
+                filterPlugins();
+            });
+
+            $("#f_add_plugins").submit(function (e) {
+                let size = 0;
+                let files = document.querySelector('input[type=file]').files;
+                for (let i = 0; i < files.length; i++) {
+                    size += files[i].size;
+                }
+                if (size > {{ fsc.getMaxFileUpload() }} * 1024 * 1024) {
+                    e.preventDefault();
+                    alert('{{ trans('plugin-file-too-big', {'%size%': fsc.getMaxFileUpload()}) }}');
+                    animateSpinner('remove');
+                }
+            });
+
+            filterPlugins();
+        });
+    </script>
+{% endblock %}
+
+{% macro statCard(bgClass, textClass, icon, iconColor, value, label) %}
+    <div class="col">
+        <div class="card flex-row align-items-center gap-2 p-3 shadow h-100">
+            <div class="{{ bgClass }} {{ textClass }} p-3 rounded-4">
+                <i class="{{ icon }} fa-lg fa-fw" style="color:{{ iconColor }};" aria-hidden="true"></i>
+            </div>
+            <div class="vstack">
+                <span class="fw-bolder lh-1 fs-7 text-black">{{ value }}</span>
+                <span class="small text-muted">{{ label }}</span>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro pluginStatusBadge(enabled, compatible, hasUpdate) %}
+    {% if enabled %}
+        <span class="badge bg-success-subtle text-success fs-2">
+            <i class="fa-solid fa-toggle-on fa-fw"></i>
+            {{ trans('active') }}
+        </span>
+    {% elseif compatible == false %}
+        <span class="badge bg-danger-subtle">
+            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+            {{ trans('incompatible') }}
+        </span>
+    {% elseif hasUpdate %}
+        <span class="fp-badge fp-badge-update bg-warning-subtle">
+            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+            {{ trans('update-available') }}
+        </span>
+    {% else %}
+        <span class="fp-badge bg-body-secondary text-dark">
+            <i class="fa-solid fa-toggle-off fa-fw" aria-hidden="true"></i>
+            {{ trans('inactive') }}
+        </span>
+    {% endif %}
+{% endmacro %}
+
+{% macro dependencyChips(require) %}
+    <div class="d-flex flex-wrap gap-1">
+        {% for dep in require %}
+            <span class="fp-dep-chip fp-dep-chip-satisfied bg-success-subtle"
+                  title="{{ trans('required-dependency') }}">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                {{ dep }}
+            </span>
+        {% else %}
+            <span class="fp-text-muted" style="font-size:12px;color:var(--fp-text-muted);">{{ trans('none') }}</span>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro pluginTableRow(plugin, url) %}
+    <tr data-plugin="{{ plugin.name }}"
+        data-enabled="{{ plugin.enabled ? '1' : '0' }}"
+        data-compatible="{{ plugin.compatible ? '1' : '0' }}"
+        data-has-update="{{ plugin.hasUpdate() ? '1' : '0' }}"
+        data-name="{{ plugin.name | lower }}"
+        data-desc="{{ plugin.description | lower }}"
+        class="item-plugin">
+        <td class="align-middle">
+            <div class="d-flex align-items-center gap-2">
+                {# <div class="{% if plugin.enabled %}bg-success-subtle text-success{% elseif plugin.compatible == false %}bg-danger-subtle text-danger{% elseif plugin.hasUpdate() %}bg-warning-subtle text-warning{% else %}bg-dark opacity-10 text-light{% endif %} p-3 rounded-4">
+                    <i class="fa-solid fa-puzzle-piece fa-lg fa-fw" aria-hidden="true"></i>
+                </div> #}
+                <div>
+                    <div class="fw-semibold">{{ plugin.name }}</div>
+                </div>
+            </div>
+        </td>
+        <td class="align-middle">
+            <div class="fp-desc-cell">{{ plugin.description | nl2br }}</div>
+            {% if plugin.forja('url', '') %}
+                <a href="{{ plugin.forja('url', '') }}" target="_blank" class="small"
+                   style="color:var(--fp-blue);font-size:12px;">
+                    {{ trans('more') }} <i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>
+                </a>
+            {% endif %}
+            {% if plugin.compatible == false %}
+                <div><small style="color:var(--fp-red);font-size:12px;">{{ plugin.compatibilityDescription() }}</small>
+                </div>
+            {% endif %}
+            {% if plugin.enabled %}
+                <div>
+                    <small style="color:var(--fp-text-muted);font-size:11px;">{{ trans('plugin-order', {'%num%': plugin.order}) }}</small>
+                </div>
+            {% endif %}
+        </td>
+        <td class="align-middle">
+            {{ _self.pluginStatusBadge(plugin.enabled, plugin.compatible, plugin.hasUpdate()) }}
+        </td>
+        <td class="align-middle">
+            {{ _self.dependencyChips(plugin.require) }}
+        </td>
+        <td class="align-middle">
+            <div class="fp-version-cell small" style="color:var(--fp-text-secondary)">
+                <span class="fw-medium fst-italic">v{{ plugin.version }}</span>
+            </div>
+        </td>
+        <td class="align-middle">
+            <div class="d-flex gap-1 justify-content-end flex-nowrap">
+                {% if plugin.enabled %}
+                    <div class="form-check form-switch d-inline-flex m-0 align-items-center bg-amber-400"
+                         title="{{ trans('disable') }}">
+                        <input class="form-check-input me-0 bg-success border-success" type="checkbox" role="switch" checked
+                               style="cursor: pointer;"
+                               onclick="return pluginAction('{{ url }}?action=disable&amp;plugin={{ plugin.name }}&amp;multireqtoken={{ formToken(false) }}', this);">
+                    </div>
+                {% elseif plugin.compatible %}
+                    <div class="form-check form-switch d-inline-flex m-0 align-items-center"
+                         title="{{ trans('enable') }}">
+                        <input class="form-check-input me-0" type="checkbox" role="switch"
+                               style="cursor: pointer;"
+                               onclick="return pluginAction('{{ url }}?action=enable&amp;plugin={{ plugin.name }}&amp;multireqtoken={{ formToken(false) }}', this);">
+                    </div>
+                {% else %}
+                    <span class="text-danger" title="{{ plugin.compatibilityDescription() }}">
+                    <i class="fa-solid fa-ban fa-fw" aria-hidden="true"></i>
+                </span>
+                {% endif %}
+                {% if plugin.enabled %}
+                    <button class="btn btn-sm btn-warning" title="{{ trans('disable') }}"
+                            onclick="return pluginAction('{{ url }}?action=disable&amp;plugin={{ plugin.name }}&amp;multireqtoken={{ formToken(false) }}', this);">
+                        <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                        {{ trans('disable') }}
+                    </button>
+                {% elseif plugin.compatible %}
+                    <button class="btn btn-sm btn-success" title="{{ trans('enable') }}"
+                            onclick="return pluginAction('{{ url }}?action=enable&amp;plugin={{ plugin.name }}&amp;multireqtoken={{ formToken(false) }}', this);">
+                        <i class="fa-solid fa-play" aria-hidden="true"></i>
+                        {{ trans('activate') }}
+                    </button>
+                {% endif %}
+                {% if plugin.hasUpdate() %}
+                    <a href="Updater" class="btn btn-sm btn-info" title="{{ trans('update') }}">
+                        <i class="fa-solid fa-cloud-download-alt" aria-hidden="true"></i>
+                        {{ trans('update') }}
+                    </a>
+                {% endif %}
+                {% if plugin.enabled == false and config('disable_rm_plugins', false) == false %}
+                    <button class="btn btn-sm btn-outline-danger" title="{{ trans('delete') }}"
+                            onclick="deletePlugin('{{ plugin.name }}');">
+                        <i class="fa-solid fa-trash-alt" aria-hidden="true"></i>
+                        {{ trans('delete') }}
+                    </button>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+{% endmacro %}
+
