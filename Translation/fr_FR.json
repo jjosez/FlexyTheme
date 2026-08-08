@@ -1,0 +1,9 @@
+{
+    "total-installed": "Total installé",
+    "incompatible": "Incompatible",
+    "dependencies": "Dépendances",
+    "no-plugins-found": "Aucun plugin trouvé",
+    "no-plugins-description": "Aucun plugin ne correspond à vos critères de recherche. Essayez d'ajuster les filtres ou le terme de recherche.",
+    "update-available": "Mise à jour disponible",
+    "required-dependency": "Dépendance requise"
+}

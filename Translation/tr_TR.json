@@ -1,0 +1,9 @@
+{
+    "total-installed": "Toplam kurulu",
+    "incompatible": "Uyumsuz",
+    "dependencies": "Bağımlılıklar",
+    "no-plugins-found": "Eklenti bulunamadı",
+    "no-plugins-description": "Hiçbir eklenti arama kriterlerinizle eşleşmiyor. Filtreleri veya arama terimini ayarlamayı deneyin.",
+    "update-available": "Güncelleme mevcut",
+    "required-dependency": "Gerekli bağımlılık"
+}

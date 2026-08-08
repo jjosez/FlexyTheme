@@ -1,0 +1,9 @@
+{
+    "total-installed": "Łącznie zainstalowano",
+    "incompatible": "Niekompatybilny",
+    "dependencies": "Zależności",
+    "no-plugins-found": "Nie znaleziono wtyczek",
+    "no-plugins-description": "Żadne wtyczki nie pasują do kryteriów wyszukiwania. Spróbuj dostosować filtry lub termin wyszukiwania.",
+    "update-available": "Dostępna aktualizacja",
+    "required-dependency": "Wymagana zależność"
+}

@@ -1,0 +1,9 @@
+{
+    "total-installed": "Celkem nainstalováno",
+    "incompatible": "Nekompatibilní",
+    "dependencies": "Závislosti",
+    "no-plugins-found": "Nenalezeny žádné pluginy",
+    "no-plugins-description": "Žádné pluginy neodpovídají kritériím vyhledávání. Zkuste upravit filtry nebo hledaný výraz.",
+    "update-available": "Dostupná aktualizace",
+    "required-dependency": "Požadovaná závislost"
+}

@@ -1,0 +1,9 @@
+{
+    "total-installed": "Guztira instalatuta",
+    "incompatible": "Bateraezina",
+    "dependencies": "Menpekotasunak",
+    "no-plugins-found": "Ez da pluginik aurkitu",
+    "no-plugins-description": "Plugin batek ere ez ditu zure bilaketa-irizpideak betetzen. Saiatu iragazkiak edo bilaketa-terminoa doitzen.",
+    "update-available": "Eguneraketa eskuragarri",
+    "required-dependency": "Beharrezko menpekotasuna"
+}

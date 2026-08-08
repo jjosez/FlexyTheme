@@ -1,0 +1,9 @@
+{
+    "total-installed": "Total instal·lats",
+    "incompatible": "Incompatible",
+    "dependencies": "Dependències",
+    "no-plugins-found": "No s'han trobat plugins",
+    "no-plugins-description": "Cap plugin coincideix amb els criteris de cerca. Prova d'ajustar els filtres o el terme de cerca.",
+    "update-available": "Actualització disponible",
+    "required-dependency": "Dependència requerida"
+}
