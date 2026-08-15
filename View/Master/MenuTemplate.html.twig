@@ -46,8 +46,10 @@
         <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/custom.css') }}?v={{ 'now' | date('ymd') }}"/>
 
         <!-- Flexy Theme -->
-        <link rel="stylesheet" href="{{ asset('Plugins/FlexyTheme/Assets/CSS/styles.min.css') }}?v={{ 'now' | date('ymd') }}"/>
-        <link rel="stylesheet" href="{{ asset('Plugins/FlexyTheme/Assets/CSS/flexy.min.css') }}?v={{ 'now' | date('ymd') }}"/>
+        <link rel="stylesheet"
+              href="{{ asset('Plugins/FlexyTheme/Assets/CSS/styles.min.css') }}?v={{ 'now' | date('ymd') }}"/>
+        <link rel="stylesheet"
+              href="{{ asset('Plugins/FlexyTheme/Assets/CSS/flexy.min.css') }}?v={{ 'now' | date('ymd') }}"/>
     {% endblock %}
     {# Adds custom CSS assets #}
     {% for css in assetManager.get('css') %}
@@ -56,6 +58,11 @@
     {% for includeView in getIncludeViews('MenuTemplate', 'CssAfter') %}
         {% include includeView['path'] %}
     {% endfor %}
+    <script>
+        if (window.innerWidth >= 1200 && window.localStorage.getItem('flexytheme.sidebar.collapsed') === 'true') {
+            document.documentElement.classList.add('flexy-sidebar-collapsed');
+        }
+    </script>
     {% for includeView in getIncludeViews('MenuTemplate', 'JsHeadBefore') %}
         {% include includeView['path'] %}
     {% endfor %}
@@ -174,14 +181,12 @@
 {% endblock %}
 </html>
 {% macro loadLogo(idfile) -%}
-    {% apply spaceless %}
-        {% set url = 'Dinamic/Assets/Images/logo-white.png' %}
-        {% if idfile > 0 %}
-            {% set attached = attachedFile(idfile) %}
-            {% if attached.filename is not empty %}
-                {% set url = attached.url('download-permanent') %}
-            {% endif %}
-        {% endif %}
-        {{ asset(url) }}
-    {% endapply %}
+    {%- set url = 'Dinamic/Assets/Images/logo-white.png' -%}
+    {%- if idfile > 0 -%}
+        {%- set attached = attachedFile(idfile) -%}
+        {%- if attached.filename is not empty -%}
+            {%- set url = attached.url('download-permanent') -%}
+        {%- endif -%}
+    {%- endif -%}
+    {{- asset(url) -}}
 {%- endmacro loadLogo %}

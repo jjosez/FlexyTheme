@@ -138,6 +138,32 @@ body {
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
+@media (min-width: 1200px) {
+    html.flexy-sidebar-collapsed #main-wrapper[data-layout="vertical"][data-sidebartype="full"] .left-sidebar {
+        left: -270px;
+    }
+
+    html.flexy-sidebar-collapsed #main-wrapper[data-layout="vertical"][data-sidebartype="full"] .body-wrapper {
+        margin-left: 0;
+    }
+
+    #main-wrapper.mini-sidebar .left-sidebar {
+        left: -270px;
+    }
+
+    #main-wrapper.mini-sidebar.show-sidebar .left-sidebar {
+        left: 0;
+    }
+
+    #main-wrapper.mini-sidebar.show-sidebar .close-btn {
+        display: block !important;
+    }
+
+    #main-wrapper.mini-sidebar .body-wrapper {
+        margin-left: 0;
+    }
+}
+
 .sidebar-item.sidebar-link-title.active {
     background-color: rgba(255, 255, 255, 0.05);
     color: #fdc90f !important;
