@@ -92,6 +92,20 @@
     {% for includeView in getIncludeViews('MenuTemplate', 'HeadEnd') %}
         {% include includeView['path'] %}
     {% endfor %}
+    <script>
+        function updateVh() {
+            var viewportHeight = window.visualViewport
+                ? window.visualViewport.height
+                : window.innerHeight;
+            document.documentElement.style.setProperty('--vh', (viewportHeight * 0.01) + 'px');
+        }
+        updateVh();
+        window.addEventListener('resize', updateVh);
+        window.addEventListener('orientationchange', updateVh);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', updateVh);
+        }
+    </script>
 </head>
 {% block fullBody %}
     <body>
@@ -122,7 +136,7 @@
                         </div>
                     </div>
                     <!-- Sidebar navigation-->
-                    <nav class="sidebar-nav scroll-sidebar" style="height: calc(100vh - 120px);"
+                    <nav class="sidebar-nav scroll-sidebar" style="height: calc(var(--vh, 1vh) * 100 - 120px);"
                          data-simplebar="">
                         <ul id="sidebarnav">
                             {% import 'Macro/Menu.html.twig' as macros %}
@@ -173,10 +187,6 @@
         <br/>
         <!-- execution time: {{ executionTime() }} s -->
     </div>
-    <script>
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    </script>
     </body>
 {% endblock %}
 </html>

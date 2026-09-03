@@ -59,9 +59,13 @@ body {
 
 .body-wrapper-inner {
     flex: 1 1 auto;
-    height: calc(100vh - 60px);
+    height: calc(var(--vh, 1vh) * 100 - var(--header-height, 60px));
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+.body-wrapper .body-wrapper-inner {
+    min-height: calc(var(--vh, 1vh) * 100 - 110px);
 }
 
 .body-wrapper .container-fluid,
